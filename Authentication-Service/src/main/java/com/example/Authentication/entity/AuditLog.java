@@ -1,4 +1,4 @@
-package com.jwt.implementation.model;
+package com.example.Authentication.entity;
 
 import javax.persistence.*;
 import java.util.Date;

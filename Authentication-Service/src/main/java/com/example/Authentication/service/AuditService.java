@@ -1,7 +1,7 @@
-package com.jwt.implementation.service;
+package com.example.Authentication.service;
 
-import com.jwt.implementation.model.AuditLog;
-import com.jwt.implementation.repository.AuditLogRepository;
+import com.example.Authentication.entity.AuditLog;
+import com.example.Authentication.repository.AuditLogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

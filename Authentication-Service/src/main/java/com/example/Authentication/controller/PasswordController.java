@@ -1,8 +1,8 @@
-package com.jwt.implementation.controller;
+package com.example.Authentication.controller;
 
-import com.jwt.implementation.dto.ChangePasswordDTO;
-import com.jwt.implementation.model.User;
-import com.jwt.implementation.repository.UserRepository;
+import com.example.Authentication.entity.ChangePasswordDTO;
+import com.example.Authentication.entity.User;
+import com.example.Authentication.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;

@@ -1,4 +1,4 @@
-package com.jwt.implementation.dto;
+package com.example.Authentication.entity;
 
 public class ChangePasswordDTO {
     private String oldPassword;

@@ -1,14 +1,13 @@
-package com.jwt.implementation.controller;
+package com.example.Authentication.controller;
 
-import com.jwt.implementation.dto.AuthRequest;
-import com.jwt.implementation.model.User;
-import com.jwt.implementation.repository.UserRepository;
-import com.jwt.implementation.service.AuditService;
-import com.jwt.implementation.util.JwtUtil;
+import com.example.Authentication.entity.AuthRequest;
+import com.example.Authentication.entity.User;
+import com.example.Authentication.repository.UserRepository;
+import com.example.Authentication.service.AuditService;
+import com.example.Authentication.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,7 +18,7 @@ import java.util.*;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/auth")
 public class AuthController {
 
     @Autowired
@@ -63,6 +62,7 @@ public class AuthController {
 
     @PostMapping("/register-admin")
     public ResponseEntity<?> registerAdmin(@RequestBody User user) {
+        System.out.println("Incoming password: " + user.getPassword());
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         user.setRole("ADMIN");
         userRepository.save(user);

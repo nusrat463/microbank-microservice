@@ -1,7 +1,7 @@
-package com.jwt.implementation.service;
+package com.example.Authentication.service;
 
-import com.jwt.implementation.model.User;
-import com.jwt.implementation.repository.UserRepository;
+import com.example.Authentication.entity.User;
+import com.example.Authentication.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

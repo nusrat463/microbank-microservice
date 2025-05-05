@@ -1,5 +1,5 @@
-package com.jwt.implementation.repository;
-import com.jwt.implementation.model.AuditLog;
+package com.example.Authentication.repository;
+import com.example.Authentication.entity.AuditLog;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AuditLogRepository extends JpaRepository<AuditLog, Long> {
