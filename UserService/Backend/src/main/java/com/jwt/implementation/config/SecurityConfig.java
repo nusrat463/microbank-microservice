@@ -24,7 +24,7 @@ public class SecurityConfig {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers(
-                        "/login", // prevent redirect loop
+                        "/login","/user/profile", // prevent redirect loop
                         "/oauth2/**",
                         "/api/oauth2/success",
                         "/api/**"

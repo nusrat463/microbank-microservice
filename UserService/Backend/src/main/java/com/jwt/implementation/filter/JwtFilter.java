@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.List;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
@@ -31,9 +30,18 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
-            Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+
+            Claims claims = Jwts.parser()
+                    .setSigningKey(secret)
+                    .parseClaimsJws(token)
+                    .getBody();
+
             String username = claims.getSubject();
             String role = claims.get("role", String.class);
+            String userId = claims.get("id", String.class); // Extract user ID
+
+            // Store userId in request for controller access
+            request.setAttribute("userId", userId);
 
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
                     username, null,

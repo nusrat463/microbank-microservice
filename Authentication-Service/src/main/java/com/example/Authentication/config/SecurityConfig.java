@@ -37,7 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers(
-                        "/login", // prevent redirect loop
+                        "/login","/auth/register", // prevent redirect loop
                         "/oauth2/**",
                         "/api/oauth2/success",
                         "/api/**","/auth/register-admin"

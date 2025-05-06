@@ -9,27 +9,41 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/user")
 public class UserProfileController {
 
     @Autowired
     private UserRepository userRepository;
 
+    @PostMapping("/profile")
+    public ResponseEntity<?> createUserProfile(@RequestBody User user) {
+        // Save to user service DB
+        User saveUser = new User();
+        saveUser.setId(user.getId());
+        saveUser.setName(user.getName());
+        saveUser.setEmail(user.getEmail());
+        saveUser.setRole(user.getRole());
+        userRepository.save(saveUser);
+        return ResponseEntity.ok("Profile created");
+    }
+
+
     @GetMapping("/profile")
-    public ResponseEntity<UserProfileDTO> getProfile(@AuthenticationPrincipal UserDetails userDetails) {
-        User user = userRepository.findByUsername(userDetails.getUsername());
-        if (user == null) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<?> getProfile(HttpServletRequest request) {
+        String userId = (String) request.getAttribute("userId");
+
+        if (userId == null) {
+            return ResponseEntity.status(401).body("Unauthorized");
         }
 
-        UserProfileDTO dto = new UserProfileDTO();
-        dto.setUsername(user.getUsername());
-        dto.setEmail(user.getEmail());
-        dto.setFullName(user.getName());
-
-        return ResponseEntity.ok(dto);
+        return userRepository.findById(Long.parseLong(userId))
+                .map(user -> ResponseEntity.ok().body(user))
+                .orElse(ResponseEntity.notFound().build());
     }
+
 
     @PutMapping("/profile")
     public ResponseEntity<?> updateProfile(@AuthenticationPrincipal UserDetails userDetails,

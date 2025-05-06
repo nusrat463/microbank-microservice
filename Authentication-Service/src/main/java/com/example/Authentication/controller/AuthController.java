@@ -1,5 +1,6 @@
 package com.example.Authentication.controller;
 
+import com.example.Authentication.dto.UserProfileRequest;
 import com.example.Authentication.entity.AuthRequest;
 import com.example.Authentication.entity.User;
 import com.example.Authentication.repository.UserRepository;
@@ -33,10 +34,22 @@ public class AuthController {
     @Autowired
     private AuditService auditService;
 
+    @Autowired
+    private UserServiceClient userServiceClient;
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         userRepository.save(user);
+
+        // Prepare DTO and send to user-service
+        UserProfileRequest profile = new UserProfileRequest();
+        profile.setId(user.getId());
+        profile.setName(user.getName());
+        profile.setEmail(user.getEmail());
+        profile.setRole(user.getRole());
+
+        userServiceClient.createUserProfile(profile);
 
         Map<String, String> response = new HashMap<>();
         response.put("message", "User registered");
@@ -66,6 +79,15 @@ public class AuthController {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         user.setRole("ADMIN");
         userRepository.save(user);
+
+        // Prepare DTO and send to user-service
+        UserProfileRequest profile = new UserProfileRequest();
+        profile.setId(user.getId());
+        profile.setName(user.getName());
+        profile.setEmail(user.getEmail());
+        profile.setRole(user.getRole());
+
+        userServiceClient.createUserProfile(profile);
 
         Map<String, String> response = new HashMap<>();
         response.put("message", "Admin registered");
