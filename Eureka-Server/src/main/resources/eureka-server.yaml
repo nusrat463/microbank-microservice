@@ -15,6 +15,7 @@ spec:
       containers:
         - name: eureka-server
           image: eureka-server:latest # Ensure you build the image before
+          imagePullPolicy: Never
           ports:
             - containerPort: 8761
 ---
