@@ -3,8 +3,10 @@ package com.example.gateway_service.filter;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -18,6 +20,8 @@ public class JwtAuthenticationFilter implements GlobalFilter {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        System.out.println("JwtAuthenticationFilter: FILTER TRIGGERED for path " + exchange.getRequest().getURI().getPath());
+
         String path = exchange.getRequest().getURI().getPath();
 
         // Skip public endpoints
@@ -40,16 +44,17 @@ public class JwtAuthenticationFilter implements GlobalFilter {
                     .parseClaimsJws(token)
                     .getBody();
 
-            String userId = claims.getSubject();
+            String userId = claims.get("userId", String.class);
             String role = claims.get("role", String.class);
 
-            // Pass user info to downstream services via headers
-            exchange.getRequest().mutate()
+            // Forward user info in headers
+            ServerHttpRequest mutatedRequest = exchange.getRequest().mutate()
                     .header("X-User-Id", userId)
                     .header("X-User-Role", role)
                     .build();
 
-            return chain.filter(exchange);
+            ServerWebExchange mutatedExchange = exchange.mutate().request(mutatedRequest).build();
+            return chain.filter(mutatedExchange);
 
         } catch (Exception e) {
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
@@ -58,8 +63,10 @@ public class JwtAuthenticationFilter implements GlobalFilter {
     }
 
     private boolean isPublicPath(String path) {
-        return path.startsWith("/auth/login") ||
+        return  path.startsWith("/auth/login") ||
+                path.startsWith("/account/creatAccount") ||
                 path.startsWith("/auth/register-admin") ||
+                path.startsWith("/auth/register") ||
                 path.startsWith("/auth/forgot-password");
     }
 }

@@ -1,6 +1,5 @@
 package com.microbank.accountservice.controller;
 
-
 import com.microbank.accountservice.model.Account;
 import com.microbank.accountservice.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +26,7 @@ public class AccountController {
     }
 
     @PostMapping("/createAccount")
-    @PreAuthorize("hasRole('USER')")
+
     public ResponseEntity<Account> create(@RequestBody Account acc, @RequestHeader("X-User-Id") Long userId) {
 
         acc.setUserId(userId);
