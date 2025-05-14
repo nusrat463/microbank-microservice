@@ -15,6 +15,7 @@ spec:
       containers:
         - name: user-service
           image: user-service:latest # Ensure you build the image before
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8039
           env:
